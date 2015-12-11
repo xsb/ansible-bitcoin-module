@@ -1,0 +1,8 @@
+Stop using bitcoin-cli and choose between bitcoin-python/0.3 and petertodd/python-bitcoinlib
+Implement check mode
+Return txid after making a transaction
+Allow user to specify server and port
+Implement getnewaddress
+Implement getbalance (confirmed and unconfirmed)
+Wait for n confirmations before exit, default=0
+Implement wait until payment is done
