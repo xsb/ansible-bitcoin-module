@@ -16,5 +16,5 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 
 ## Requirements
 
-- python-bitcoinlib >= 0.5
-- bitcoind (bitcoin-core daemon)
+- python-bitcoinlib >= 0.5.0
+- bitcoind (Bitcoin Core daemon) >= v0.11.0

@@ -22,8 +22,8 @@ options:
       - Use testnet mode
     default: false
 requirements:
-  - "python-bitcoinlib >= 0.5"
-  - "bitcoind (bitcoin-core daemon)"
+  - "python-bitcoinlib >= 0.5.0"
+  - "bitcoind (Bitcoin Core daemon) >= v0.11.0"
 '''
 
 EXAMPLES = '''
