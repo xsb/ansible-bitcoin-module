@@ -27,17 +27,9 @@ EXAMPLES = '''
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
 '''
 
-import bitcoin
-from bitcoin import rpc
-
-#def send_transaction(sendtoaddress, amount):
-#    r = proxy.sendtoaddress(sendtoaddress, amount)
-#    return r
+from bitcoin import SelectParams, rpc
 
 def main():
-
-    bitcoin.SelectParams("testnet")
-    proxy = rpc.Proxy()
 
     module = AnsibleModule(
         argument_spec = dict(
@@ -47,28 +39,29 @@ def main():
         supports_check_mode = False
     )
 
-    sendtoaddress = module.params['sendtoaddress']
-    amount = module.params['amount']
+    SelectParams("testnet")
+    proxy = rpc.Proxy()
 
-    rc = None
-    out = 'out'
-    err = 'err'
+    sendtoaddress = module.params['sendtoaddress']
+    raw_amount = module.params['amount']
+    amount = float(raw_amount)*100000000
+
+    err = ''
     result = {}
     result['sendtoaddress'] = sendtoaddress
-    result['amount'] = amount
+    result['amount'] = raw_amount
 
     try:
-        proxy.sendtoaddress(sendtoaddress, int(amount*100000000))
-        #r = send_transaction(sendtoaddress, amount)
-        result['changed'] = True
+        txid = proxy.sendtoaddress(sendtoaddress, amount)
     except:
-        module.fail_json(sendtoaddress=sendtoaddress, amount=amount, msg=err)
-        result['changed'] = False
+        err = "Error sending transaction"
 
-    if out:
-        result['stdout'] = out
     if err:
-        result['stderr'] = err
+        module.fail_json(sendtoaddress=sendtoaddress, amount=raw_amount, msg=err)
+        result['changed'] = False
+    else:
+        result['txid'] = txid
+        result['changed'] = True
 
     module.exit_json(**result)
 
