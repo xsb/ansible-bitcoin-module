@@ -65,8 +65,8 @@ def main():
 
     try:
         txid = proxy.sendtoaddress(sendtoaddress, amount)
-    except:
-        err = "Error sending transaction"
+    except Exception as e:
+        err = str(e)
 
     if err:
         module.fail_json(sendtoaddress=sendtoaddress, amount=raw_amount, msg=err)
