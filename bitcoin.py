@@ -21,6 +21,18 @@ options:
     description:
       - Use testnet mode
     default: false
+  service_url:
+    description:
+      - If not specified, the username and password are read out of the file
+    default: None
+  service_port:
+    description:
+      - The default port is set according to the chain parameters in use: mainnet, testnet
+    default: None
+  btc_conf_file:
+    description:
+      - If not specified "~/.bitcoin/bitcoin.conf" or equivalent is used by default.
+    default: None
 requirements:
   - "python-bitcoinlib >= 0.5.0"
   - "bitcoind (Bitcoin Core daemon) >= v0.11.0"
@@ -33,6 +45,11 @@ EXAMPLES = '''
 # Send a transaction using testnet
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
 
+# Specify service URL for connection to bitcoind
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 service_url=http://user:password@127.0.0.1:8332
+
+# Specify port and config file for bitoind client
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 service_port=8332 btc_conf_file=/path/to/bitcoin.conf
 '''
 
 from bitcoin import SelectParams, rpc
@@ -44,6 +61,9 @@ def main():
             sendtoaddress = dict(required=True, type='str'),
             amount = dict(required=True, type='str'),
             testnet = dict(default=False, type='bool'),
+            service_url = dict(default=None, type='str'),
+            service_port = dict(default=None, type='int'),
+            btc_conf_file = dict(default=None, type='str'),
         ),
         supports_check_mode = True
     )
@@ -52,7 +72,12 @@ def main():
         SelectParams("testnet")
     else:
         SelectParams("mainnet")
-    proxy = rpc.Proxy()
+
+    proxy = rpc.Proxy(
+            module.params['service_url'],
+            module.params['service_port'],
+            module.params['btc_conf_file']
+    )
 
     sendtoaddress = module.params['sendtoaddress']
     raw_amount = module.params['amount']
