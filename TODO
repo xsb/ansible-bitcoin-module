@@ -1,4 +1,3 @@
-Implement check mode
 Return txid after making a transaction
 Allow user to specify server and port
 Implement getnewaddress
