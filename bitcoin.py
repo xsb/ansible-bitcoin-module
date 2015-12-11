@@ -28,12 +28,16 @@ EXAMPLES = '''
 '''
 
 import bitcoin
+from bitcoin import rpc
 
-def send_transaction(module):
-    cmd = "bitcoin-cli sendtoaddress %s %s" % (module.params['sendtoaddress'], module.params['amount'])
-    return module.run_command(cmd)
+#def send_transaction(sendtoaddress, amount):
+#    r = proxy.sendtoaddress(sendtoaddress, amount)
+#    return r
 
 def main():
+
+    bitcoin.SelectParams("testnet")
+    proxy = rpc.Proxy()
 
     module = AnsibleModule(
         argument_spec = dict(
@@ -43,21 +47,24 @@ def main():
         supports_check_mode = False
     )
 
+    sendtoaddress = module.params['sendtoaddress']
+    amount = module.params['amount']
+
     rc = None
-    out = ''
-    err = ''
+    out = 'out'
+    err = 'err'
     result = {}
-    result['sendtoaddress'] = module.params['sendtoaddress']
-    result['amount'] = module.params['amount']
+    result['sendtoaddress'] = sendtoaddress
+    result['amount'] = amount
 
-    (rc, out, err) = send_transaction(module)
-    if rc != 0:
-        module.fail_json(sendtoaddress=module.params['sendtoaddress'], amount=module.params['amount'], msg=err, rc=rc)
-
-    if rc is None:
-        result['changed'] = False
-    else:
+    try:
+        proxy.sendtoaddress(sendtoaddress, int(amount*100000000))
+        #r = send_transaction(sendtoaddress, amount)
         result['changed'] = True
+    except:
+        module.fail_json(sendtoaddress=sendtoaddress, amount=amount, msg=err)
+        result['changed'] = False
+
     if out:
         result['stdout'] = out
     if err:
@@ -65,6 +72,8 @@ def main():
 
     module.exit_json(**result)
 
+# import module snippets
 from ansible.module_utils.basic import *
+
 if __name__ == '__main__':
     main()
