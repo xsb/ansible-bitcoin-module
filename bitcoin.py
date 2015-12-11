@@ -45,7 +45,7 @@ def main():
             amount = dict(required=True, type='str'),
             testnet = dict(default=False, type='bool'),
         ),
-        supports_check_mode = False
+        supports_check_mode = True
     )
 
     if module.params['testnet']:
@@ -59,14 +59,16 @@ def main():
     amount = float(raw_amount)*100000000
 
     err = ''
+    txid = ''
     result = {}
     result['sendtoaddress'] = sendtoaddress
     result['amount'] = raw_amount
 
-    try:
-        txid = proxy.sendtoaddress(sendtoaddress, amount)
-    except Exception as e:
-        err = str(e)
+    if not module.check_mode:
+        try:
+            txid = proxy.sendtoaddress(sendtoaddress, amount)
+        except Exception as e:
+            err = str(e)
 
     if err:
         module.fail_json(sendtoaddress=sendtoaddress, amount=raw_amount, msg=err)
