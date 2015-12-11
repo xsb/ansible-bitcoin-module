@@ -9,6 +9,9 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 ```
 # Send 0.01 BTC to 1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
+
+# Send a transaction using testnet
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
 ```
 
 ## Requirements

@@ -17,6 +17,10 @@ options:
     description:
       - Amount to transact
     required: true
+  testnet:
+    description:
+      - Use testnet mode
+    default: false
 requirements:
   - "python-bitcoinlib >= 0.5"
   - "bitcoind (bitcoin-core daemon)"
@@ -25,6 +29,10 @@ requirements:
 EXAMPLES = '''
 # Send 0.01 BTC to 1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
+
+# Send a transaction using testnet
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
+
 '''
 
 from bitcoin import SelectParams, rpc
@@ -35,11 +43,15 @@ def main():
         argument_spec = dict(
             sendtoaddress = dict(required=True, type='str'),
             amount = dict(required=True, type='str'),
+            testnet = dict(default=False, type='bool'),
         ),
         supports_check_mode = False
     )
 
-    SelectParams("testnet")
+    if module.params['testnet']:
+        SelectParams("testnet")
+    else:
+        SelectParams("mainnet")
     proxy = rpc.Proxy()
 
     sendtoaddress = module.params['sendtoaddress']
