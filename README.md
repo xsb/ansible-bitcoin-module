@@ -11,13 +11,20 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
 
 # Send a transaction using testnet
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
+           amount=0.01
+           testnet=true
 
 # Specify service URL for connection to bitcoind
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 service_url=http://user:password@127.0.0.1:8332
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
+           amount=0.01
+           service_url=http://user:password@127.0.0.1:8332
 
 # Specify port and config file for bitoind client
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 service_port=8332 btc_conf_file=/path/to/bitcoin.conf
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
+           amount=0.01
+           service_port=8332
+           btc_conf_file=/path/to/bitcoin.conf
 ```
 
 ## Requirements
