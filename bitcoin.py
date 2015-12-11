@@ -99,7 +99,7 @@ def main():
         module.fail_json(sendtoaddress=sendtoaddress, amount=raw_amount, msg=err)
         result['changed'] = False
     else:
-        result['txid'] = txid
+        result['txid'] = txid.encode("hex")
         result['changed'] = True
 
     module.exit_json(**result)
