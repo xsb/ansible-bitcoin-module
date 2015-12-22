@@ -22,15 +22,12 @@ btc_conf_file | no       |         |            | If not specified "~/.bitcoin/b
 
 ## Examples
 
-```yml
+```yaml
 # Send 0.01 BTC to 1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
-           amount=0.01
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
 
 # Send a transaction using testnet
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
-           amount=0.01
-           testnet=true
+- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
 ```
 
 ## Return Values
