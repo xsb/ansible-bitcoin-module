@@ -12,7 +12,7 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 ## Options
 
 Parameter     | Required | Default | Choices    | Comments
-------------- | -------- | ------- | ---------- | --------
+:------------ | :------- | :------ | :--------- | :-------
 sendtoaddress | yes      |         |            | Public bitcoin address
 amount        | yes      |         |            | Amount to transact
 testnet       | no       | false   | true/false | Use testnet mode
@@ -22,7 +22,7 @@ btc_conf_file | no       |         |            | If not specified "~/.bitcoin/b
 
 ## Examples
 
-```
+```yml
 # Send 0.01 BTC to 1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF
            amount=0.01
@@ -36,5 +36,5 @@ btc_conf_file | no       |         |            | If not specified "~/.bitcoin/b
 ## Return Values
 
 Name | Description    | Returned | Type   | Sample
----- | -------------- | -------- | ------ | ------
+:--- | :------------- | :------- | :----- | :-----
 txid | transaction id | success  | string | f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6
