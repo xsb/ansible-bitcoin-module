@@ -30,6 +30,11 @@ options:
     description:
       - Amount to transact
     required: true
+  getnewaddress:
+    description:
+      - Generate a new bitcoin address
+    required: false
+    default: null
   testnet:
     description:
       - If true, use testnet instead of mainnet
@@ -69,9 +74,39 @@ txid:
   returned: success
   type: string
   sample: f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6
+newaddress:
+  description: new bitcoin address
+  returned: success
+  type: string
+  sample: 17Y7ZaAZYF3Gz8Sa9c5UifciVuthWfxx7F
 '''
 
 from bitcoin import SelectParams, rpc
+
+def amount_convert(a):
+    """
+    Receives an amount in BTC and returns the value in satoshis
+    """
+    amount = float(a)*100000000
+    return amount
+
+def transaction(m, p, sendtoaddress, amount):
+    """
+    Sends a standard bitcoin transaction to the network
+    """
+    txid = ''
+    if not m.check_mode:
+        txid = p.sendtoaddress(sendtoaddress, amount)
+    return txid
+
+def getnewaddress(m, p):
+    """
+    Generates a new bitcoin address
+    """
+    address = ''
+    if not m.check_mode:
+        address = str(p.getnewaddress())
+    return address
 
 def main():
 
@@ -79,6 +114,7 @@ def main():
         argument_spec = dict(
             sendtoaddress = dict(required=True, type='str'),
             amount = dict(required=True, type='str'),
+            getnewaddress = dict(required=False, default=False, type='bool'),
             testnet = dict(required=False, default=False, type='bool'),
             service_url = dict(required=False, default=None, type='str'),
             service_port = dict(required=False, default=None, type='int'),
@@ -87,39 +123,52 @@ def main():
         supports_check_mode = True
     )
 
-    if module.params['testnet']:
+    p = module.params
+
+    if p['testnet']:
         SelectParams("testnet")
     else:
         SelectParams("mainnet")
 
     proxy = rpc.Proxy(
-            module.params['service_url'],
-            module.params['service_port'],
-            module.params['btc_conf_file']
+        p['service_url'],
+        p['service_port'],
+        p['btc_conf_file']
     )
 
-    sendtoaddress = module.params['sendtoaddress']
-    raw_amount = module.params['amount']
-    amount = float(raw_amount)*100000000
-
     err = ''
-    txid = ''
     result = {}
-    result['sendtoaddress'] = sendtoaddress
-    result['amount'] = raw_amount
+    result['changed'] = False
 
-    if not module.check_mode:
+    if p['sendtoaddress'] and p['amount']:
+        sendtoaddress = p['sendtoaddress']
+        amount = amount_convert(p['amount'])
+
+        result['sendtoaddress'] = sendtoaddress
+        result['amount'] = p['amount']
+
         try:
-            txid = proxy.sendtoaddress(sendtoaddress, amount)
+            txid = transaction(module, proxy, sendtoaddress, amount)
         except Exception as e:
             err = str(e)
 
-    if err:
-        module.fail_json(sendtoaddress=sendtoaddress, amount=raw_amount, msg=err)
-        result['changed'] = False
-    else:
-        result['txid'] = txid.encode("hex")
-        result['changed'] = True
+        if err:
+            module.fail_json(msg=err, changed=False, sendtoaddress=sendtoaddress, amount=p['amount'])
+        else:
+            result['changed'] = True
+            result['txid'] = txid.encode("hex")
+
+    if p['getnewaddress']:
+        try:
+            newaddress = getnewaddress(module, proxy)
+        except Exception as e:
+            err = str(e)
+
+        if err:
+            module.fail_json(msg=err, changed=False)
+        else:
+            result['changed'] = True
+            result['newaddress'] = newaddress
 
     module.exit_json(**result)
 

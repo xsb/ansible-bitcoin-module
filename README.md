@@ -11,14 +11,15 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 
 ## Options
 
-Parameter     | Required | Default | Choices    | Comments
-:------------ | :------- | :------ | :--------- | :-------
-sendtoaddress | yes      |         |            | Public bitcoin address
-amount        | yes      |         |            | Amount to transact
-testnet       | no       | false   | true/false | If `true`, use *testnet* instead of *mainnet*
-service_url   | no       |         |            | If not specified, the username and password are read out of the file
-service_port  | no       |         |            | The default port is set according to the chain parameters in use: *mainnet*, *testnet*
-btc_conf_file | no       |         |            | If not specified `~/.bitcoin/bitcoin.conf` or equivalent is used by default
+Parameter       | Required | Default | Choices    | Comments
+:-------------- | :------- | :------ | :--------- | :-------
+sendtoaddress   | yes      |         |            | Public bitcoin address
+amount          | yes      |         |            | Amount to transact
+getnewaddress   | no       |         |            | Generate a new bitcoin address
+testnet         | no       | false   | true/false | If `true`, use *testnet* instead of *mainnet*
+service_url     | no       |         |            | If not specified, the username and password are read out of the file
+service_port    | no       |         |            | The default port is set according to the chain parameters in use: *mainnet*, *testnet*
+btc_conf_file   | no       |         |            | If not specified `~/.bitcoin/bitcoin.conf` or equivalent is used by default
 
 ## Examples
 
@@ -32,6 +33,7 @@ btc_conf_file | no       |         |            | If not specified `~/.bitcoin/b
 
 ## Return Values
 
-Name | Description    | Returned | Type   | Sample
-:--- | :------------- | :------- | :----- | :-----
-txid | transaction id | success  | string | `f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6`
+Name       | Description         | Returned | Type   | Sample
+:--------- | :------------------ | :------- | :----- | :-----
+txid       | transaction id      | success  | string | `f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6`
+newaddress | new bitcoin address | success  | string | `17Y7ZaAZYF3Gz8Sa9c5UifciVuthWfxx7F`

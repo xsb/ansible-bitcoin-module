@@ -1,4 +1,3 @@
-Implement getnewaddress
 Implement getbalance (confirmed and unconfirmed)
 Wait for n confirmations before exit, default=0
 Implement wait until payment is done
