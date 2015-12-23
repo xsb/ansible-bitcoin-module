@@ -19,7 +19,7 @@ options:
     required: true
   testnet:
     description:
-      - Use testnet mode
+      - If true, use testnet instead of mainnet
     default: false
   service_url:
     description:

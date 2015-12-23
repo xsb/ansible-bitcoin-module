@@ -15,10 +15,10 @@ Parameter     | Required | Default | Choices    | Comments
 :------------ | :------- | :------ | :--------- | :-------
 sendtoaddress | yes      |         |            | Public bitcoin address
 amount        | yes      |         |            | Amount to transact
-testnet       | no       | false   | true/false | Use testnet mode
+testnet       | no       | false   | true/false | If `true`, use *testnet* instead of *mainnet*
 service_url   | no       |         |            | If not specified, the username and password are read out of the file
-service_port  | no       |         |            | The default port is set according to the chain parameters in use: mainnet, testnet
-btc_conf_file | no       |         |            | If not specified "~/.bitcoin/bitcoin.conf" or equivalent is used by default.
+service_port  | no       |         |            | The default port is set according to the chain parameters in use: *mainnet*, *testnet*
+btc_conf_file | no       |         |            | If not specified `~/.bitcoin/bitcoin.conf` or equivalent is used by default
 
 ## Examples
 
@@ -34,4 +34,4 @@ btc_conf_file | no       |         |            | If not specified "~/.bitcoin/b
 
 Name | Description    | Returned | Type   | Sample
 :--- | :------------- | :------- | :----- | :-----
-txid | transaction id | success  | string | f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6
+txid | transaction id | success  | string | `f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6`
