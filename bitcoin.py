@@ -25,11 +25,13 @@ options:
   sendtoaddress:
     description:
       - Public bitcoin address
-    required: true
+    required: false
+    default: null
   amount:
     description:
       - Amount to transact
-    required: true
+    required: false
+    default: null
   getnewaddress:
     description:
       - Generate a new bitcoin address
@@ -68,6 +70,9 @@ EXAMPLES = '''
 
 # Send a transaction using testnet
 - bitcoin: sendtoaddress=n1LzM8zxDvtsdTVbc4yeY4vixa2H2uF5Ev amount=0.01 testnet=yes
+
+# Generate new bitcoin address
+- bitcoin: getnewaddress=true
 '''
 
 RETURN = '''
@@ -114,8 +119,8 @@ def main():
 
     module = AnsibleModule(
         argument_spec = dict(
-            sendtoaddress = dict(required=True, type='str'),
-            amount        = dict(required=True, type='str'),
+            sendtoaddress = dict(required=False, default=None, type='str'),
+            amount        = dict(required=False, default=None, type='str'),
             getnewaddress = dict(required=False, default='no', choices=['yes', 'no']),
             testnet       = dict(required=False, default='no', choices=['yes', 'no']),
             service_url   = dict(required=False, default=None, type='str'),

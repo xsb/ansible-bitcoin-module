@@ -13,8 +13,8 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 
 Parameter       | Required | Default | Choices | Comments
 :-------------- | :------- | :------ | :------ | :-------
-sendtoaddress   | yes      |         |         | Public bitcoin address
-amount          | yes      |         |         | Amount to transact
+sendtoaddress   | no       |         |         | Public bitcoin address
+amount          | no       |         |         | Amount to transact
 getnewaddress   | no       | no      | yes/no  | Generate a new bitcoin address
 testnet         | no       | no      | yes/no  | If `yes`, use *testnet* instead of *mainnet*
 service_url     | no       |         |         | If not specified, the username and password are read out of the file
@@ -29,6 +29,9 @@ btc_conf_file   | no       |         |         | If not specified `~/.bitcoin/bi
 
 # Send a transaction using testnet
 - bitcoin: sendtoaddress=n1LzM8zxDvtsdTVbc4yeY4vixa2H2uF5Ev amount=0.01 testnet=yes
+
+# Generate new bitcoin address
+- bitcoin: getnewaddress=true
 ```
 
 ## Return Values
