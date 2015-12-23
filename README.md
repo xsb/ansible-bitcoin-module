@@ -16,7 +16,7 @@ Parameter       | Required | Default | Choices              | Comments
 sendtoaddress   | no       |         |                      | Public bitcoin address
 amount          | no       |         |                      | Amount to transact
 getnewaddress   | no       | no      | yes, no              | Generate a new bitcoin address
-getbalance      | no       | no      | confirmed, total, no | Get current wallet balance. "confirmed" expects al least 1 confirmation, "total" is for 0 confirmations
+getbalance      | no       | no      | confirmed, total, no | Get current wallet balance. `confirmed` expects al least 1 confirmation, `total` is for 0 confirmations
 testnet         | no       | no      | yes, no              | If `yes`, use *testnet* instead of *mainnet*
 service_url     | no       |         |                      | If not specified, the username and password are read out of the file
 service_port    | no       |         |                      | The default port is set according to the chain parameters in use: *mainnet*, *testnet*
