@@ -1,10 +1,23 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+#
+# This module is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this software.  If not, see <http://www.gnu.org/licenses/>.
 
 DOCUMENTATION = '''
 ---
 module: bitcoin
-author: "Xavi S.B. @xavi_xsb"
+author: "Xavi S.B. @xsb"
 short_description: automate bitcoin transactions
 description:
   - Automates Bitcoin transactions using a Bitcoin Core full node running locally
@@ -20,19 +33,23 @@ options:
   testnet:
     description:
       - If true, use testnet instead of mainnet
+    required: false
     default: false
   service_url:
     description:
       - If not specified, the username and password are read out of the file
-    default: None
+    required: false
+    default: null
   service_port:
     description:
       - The default port is set according to the chain parameters in use: mainnet, testnet
-    default: None
+    required: false
+    default: null
   btc_conf_file:
     description:
       - If not specified "~/.bitcoin/bitcoin.conf" or equivalent is used by default.
-    default: None
+    required: false
+    default: null
 requirements:
   - "python-bitcoinlib >= 0.5.0"
   - "bitcoind (Bitcoin Core daemon) >= v0.11.0"
@@ -46,6 +63,14 @@ EXAMPLES = '''
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
 '''
 
+RETURN = '''
+txid:
+  description: transaction id
+  returned: success
+  type: string
+  sample: f5d8ee39a430901c91a5917b9f2dc19d6d1a0e9cea205b009ca73dd04470b9a6
+'''
+
 from bitcoin import SelectParams, rpc
 
 def main():
@@ -54,10 +79,10 @@ def main():
         argument_spec = dict(
             sendtoaddress = dict(required=True, type='str'),
             amount = dict(required=True, type='str'),
-            testnet = dict(default=False, type='bool'),
-            service_url = dict(default=None, type='str'),
-            service_port = dict(default=None, type='int'),
-            btc_conf_file = dict(default=None, type='str'),
+            testnet = dict(required=False, default=False, type='bool'),
+            service_url = dict(required=False, default=None, type='str'),
+            service_port = dict(required=False, default=None, type='int'),
+            btc_conf_file = dict(required=False, default=None, type='str'),
         ),
         supports_check_mode = True
     )
