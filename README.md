@@ -11,15 +11,15 @@ This is experimental code and should not be used to transfer money. Run bitcoin 
 
 ## Options
 
-Parameter       | Required | Default | Choices    | Comments
-:-------------- | :------- | :------ | :--------- | :-------
-sendtoaddress   | yes      |         |            | Public bitcoin address
-amount          | yes      |         |            | Amount to transact
-getnewaddress   | no       |         |            | Generate a new bitcoin address
-testnet         | no       | false   | true/false | If `true`, use *testnet* instead of *mainnet*
-service_url     | no       |         |            | If not specified, the username and password are read out of the file
-service_port    | no       |         |            | The default port is set according to the chain parameters in use: *mainnet*, *testnet*
-btc_conf_file   | no       |         |            | If not specified `~/.bitcoin/bitcoin.conf` or equivalent is used by default
+Parameter       | Required | Default | Choices | Comments
+:-------------- | :------- | :------ | :------ | :-------
+sendtoaddress   | yes      |         |         | Public bitcoin address
+amount          | yes      |         |         | Amount to transact
+getnewaddress   | no       | no      | yes/no  | Generate a new bitcoin address
+testnet         | no       | no      | yes/no  | If `yes`, use *testnet* instead of *mainnet*
+service_url     | no       |         |         | If not specified, the username and password are read out of the file
+service_port    | no       |         |         | The default port is set according to the chain parameters in use: *mainnet*, *testnet*
+btc_conf_file   | no       |         |         | If not specified `~/.bitcoin/bitcoin.conf` or equivalent is used by default
 
 ## Examples
 
@@ -28,7 +28,7 @@ btc_conf_file   | no       |         |            | If not specified `~/.bitcoin
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
 
 # Send a transaction using testnet
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
+- bitcoin: sendtoaddress=n1LzM8zxDvtsdTVbc4yeY4vixa2H2uF5Ev amount=0.01 testnet=yes
 ```
 
 ## Return Values

@@ -34,12 +34,14 @@ options:
     description:
       - Generate a new bitcoin address
     required: false
-    default: null
+    default: no
+    choices: [ "yes", "no" ]
   testnet:
     description:
-      - If true, use testnet instead of mainnet
+      - If "yes", use testnet instead of mainnet
     required: false
-    default: false
+    default: no
+    choices: [ "yes", "no" ]
   service_url:
     description:
       - If not specified, the username and password are read out of the file
@@ -65,7 +67,7 @@ EXAMPLES = '''
 - bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01
 
 # Send a transaction using testnet
-- bitcoin: sendtoaddress=1xsb94c9AMkj8GzhqYEJkieCXBpCZPvaF amount=0.01 testnet=true
+- bitcoin: sendtoaddress=n1LzM8zxDvtsdTVbc4yeY4vixa2H2uF5Ev amount=0.01 testnet=yes
 '''
 
 RETURN = '''
@@ -113,11 +115,11 @@ def main():
     module = AnsibleModule(
         argument_spec = dict(
             sendtoaddress = dict(required=True, type='str'),
-            amount = dict(required=True, type='str'),
-            getnewaddress = dict(required=False, default=False, type='bool'),
-            testnet = dict(required=False, default=False, type='bool'),
-            service_url = dict(required=False, default=None, type='str'),
-            service_port = dict(required=False, default=None, type='int'),
+            amount        = dict(required=True, type='str'),
+            getnewaddress = dict(required=False, default='no', choices=['yes', 'no']),
+            testnet       = dict(required=False, default='no', choices=['yes', 'no']),
+            service_url   = dict(required=False, default=None, type='str'),
+            service_port  = dict(required=False, default=None, type='int'),
             btc_conf_file = dict(required=False, default=None, type='str'),
         ),
         supports_check_mode = True
@@ -125,7 +127,7 @@ def main():
 
     p = module.params
 
-    if p['testnet']:
+    if p['testnet'] == 'yes':
         SelectParams("testnet")
     else:
         SelectParams("mainnet")
@@ -158,7 +160,7 @@ def main():
             result['changed'] = True
             result['txid'] = txid.encode("hex")
 
-    if p['getnewaddress']:
+    if p['getnewaddress'] == 'yes':
         try:
             newaddress = getnewaddress(module, proxy)
         except Exception as e:
