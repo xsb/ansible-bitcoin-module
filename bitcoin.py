@@ -38,6 +38,12 @@ options:
     required: false
     default: no
     choices: [ "yes", "no" ]
+  getbalance:
+    description:
+      - Get current wallet balance
+    required: false
+    default: no
+    choices: [ "confirmed", "total", "no" ]
   testnet:
     description:
       - If "yes", use testnet instead of mainnet
@@ -72,7 +78,10 @@ EXAMPLES = '''
 - bitcoin: sendtoaddress=n1LzM8zxDvtsdTVbc4yeY4vixa2H2uF5Ev amount=0.01 testnet=yes
 
 # Generate new bitcoin address
-- bitcoin: getnewaddress=true
+- bitcoin: getnewaddress=yes
+
+# Get confirmed wallet balance
+- bitcoin: getbalance=confirmed
 '''
 
 RETURN = '''
@@ -86,15 +95,27 @@ newaddress:
   returned: success
   type: string
   sample: 17Y7ZaAZYF3Gz8Sa9c5UifciVuthWfxx7F
+balance:
+  description: wallet balance
+  returned: success
+  type: float
+  sample: 1.23965164
 '''
 
 from bitcoin import SelectParams, rpc
 
-def amount_convert(a):
+def amount_convert_from_btc(a):
     """
     Receives an amount in BTC and returns the value in satoshis
     """
     amount = float(a)*100000000
+    return amount
+
+def amount_convert_to_btc(a):
+    """
+    Receives an amount in satoshis and returns the value in BTC
+    """
+    amount = float(a)/100000000
     return amount
 
 def transaction(m, p, sendtoaddress, amount):
@@ -115,6 +136,16 @@ def getnewaddress(m, p):
         address = str(p.getnewaddress())
     return address
 
+def getbalance(p, balance_type):
+    """
+    Get current balance
+    """
+    if balance_type == 'confirmed':
+        balance = p.getbalance(minconf=1)
+    elif balance_type == 'total':
+        balance = p.getbalance(minconf=0)
+    return amount_convert_from_btc(balance)
+
 def main():
 
     module = AnsibleModule(
@@ -122,6 +153,7 @@ def main():
             sendtoaddress = dict(required=False, default=None, type='str'),
             amount        = dict(required=False, default=None, type='str'),
             getnewaddress = dict(required=False, default='no', choices=['yes', 'no']),
+            getbalance    = dict(required=False, default='no', choices=['confirmed', 'total', 'no']),
             testnet       = dict(required=False, default='no', choices=['yes', 'no']),
             service_url   = dict(required=False, default=None, type='str'),
             service_port  = dict(required=False, default=None, type='int'),
@@ -149,7 +181,7 @@ def main():
 
     if p['sendtoaddress'] and p['amount']:
         sendtoaddress = p['sendtoaddress']
-        amount = amount_convert(p['amount'])
+        amount = amount_convert_from_btc(p['amount'])
 
         result['sendtoaddress'] = sendtoaddress
         result['amount'] = p['amount']
@@ -176,6 +208,18 @@ def main():
         else:
             result['changed'] = True
             result['newaddress'] = newaddress
+
+    if p['getbalance'] != 'no':
+        try:
+            balance = getbalance(proxy, p['getbalance'])
+        except Exception as e:
+            err = str(e)
+
+        if err:
+            module.fail_json(msg=err, changed=False)
+        else:
+            result['changed'] = True
+            result['balance'] = balance
 
     module.exit_json(**result)
 
