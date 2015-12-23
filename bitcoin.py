@@ -40,7 +40,7 @@ options:
     choices: [ "yes", "no" ]
   getbalance:
     description:
-      - Get current wallet balance
+      - Get current wallet balance. "confirmed" expects al least 1 confirmation, "total" is for 0 confirmations.
     required: false
     default: no
     choices: [ "confirmed", "total", "no" ]
