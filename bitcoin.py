@@ -175,7 +175,6 @@ def main():
         p['btc_conf_file']
     )
 
-    err = ''
     result = {}
     result['changed'] = False
 
@@ -188,38 +187,25 @@ def main():
 
         try:
             txid = transaction(module, proxy, sendtoaddress, amount)
-        except Exception as e:
-            err = str(e)
-
-        if err:
-            module.fail_json(msg=err, changed=False, sendtoaddress=sendtoaddress, amount=p['amount'])
-        else:
             result['changed'] = True
             result['txid'] = txid.encode("hex")
+        except Exception as e:
+            module.fail_json(msg=str(e), changed=False, sendtoaddress=sendtoaddress, amount=p['amount'])
 
     if p['getnewaddress'] == 'yes':
         try:
             newaddress = getnewaddress(module, proxy)
-        except Exception as e:
-            err = str(e)
-
-        if err:
-            module.fail_json(msg=err, changed=False)
-        else:
             result['changed'] = True
             result['newaddress'] = newaddress
+        except Exception as e:
+            module.fail_json(msg=str(e), changed=False)
 
     if p['getbalance'] != 'no':
         try:
             balance = getbalance(proxy, p['getbalance'])
-        except Exception as e:
-            err = str(e)
-
-        if err:
-            module.fail_json(msg=err, changed=False)
-        else:
-            result['changed'] = True
             result['balance'] = balance
+        except Exception as e:
+            module.fail_json(msg=str(e), changed=False)
 
     module.exit_json(**result)
 
